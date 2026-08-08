@@ -240,3 +240,106 @@ button {
 .final-roster li:last-child {
   border-bottom: none;
 }
+
+/* ── Planet map ─────────────────────────────────────────── */
+
+.planet-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.planet-tab {
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+}
+
+.planet-tab--active {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+
+.planet-map {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0.75rem;
+  background: var(--bg-alt);
+  display: block;
+}
+
+/* Edges */
+.map-edge {
+  stroke-width: 2;
+  fill: none;
+}
+
+.map-edge--monorail {
+  stroke: #6b7aa1;
+}
+
+.map-edge--warp {
+  stroke: #a855f7;
+  stroke-dasharray: 6 4;
+}
+
+/* Nodes */
+.map-node {
+  fill: #3a2d6a;
+  stroke: #9580c8;
+  stroke-width: 1.5;
+}
+
+.map-node--spaceport {
+  fill: #1e3a5f;
+  stroke: #f59e0b;
+  stroke-width: 2;
+}
+
+.map-node-spaceport-ring {
+  fill: none;
+  stroke: #f59e0b;
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.map-node-glow {
+  fill: none;
+  stroke: white;
+  stroke-width: 1.5;
+  opacity: 0.4;
+}
+
+/* Labels */
+.map-label {
+  font-size: 9px;
+  fill: var(--text-muted);
+  pointer-events: none;
+}
+
+.map-label--shuttle {
+  fill: #f59e0b;
+  font-size: 8px;
+}
+
+/* Player tokens */
+.map-token {
+  stroke-width: 2;
+}
+
+.map-token--rebel {
+  fill: var(--accent);
+  stroke: white;
+}
+
+.map-token--fascist {
+  fill: var(--fascist);
+  stroke: white;
+}
+
+.map-token--current {
+  stroke-width: 2.5;
+}
