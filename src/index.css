@@ -241,6 +241,56 @@ button {
   border-bottom: none;
 }
 
+/* ── Exit button ────────────────────────────────────────── */
+
+.exit-game {
+  align-self: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: auto;
+}
+
+/* ── Dev panel ──────────────────────────────────────────── */
+
+.dev-panel {
+  border: 1px dashed #4a3a6a;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-alt);
+}
+
+.dev-panel__summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  list-style: none;
+  user-select: none;
+}
+
+.dev-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.dev-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.dev-field input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.dev-panel__launch {
+  margin-top: 0.25rem;
+}
+
 /* ── Planet map ─────────────────────────────────────────── */
 
 .planet-tabs {

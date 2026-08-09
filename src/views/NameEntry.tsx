@@ -1,6 +1,9 @@
 import type { Dispatch } from 'react'
 import type { Action, GameState } from '../state/types'
 import { MAX_PLAYERS, MIN_PLAYERS } from '../state/types'
+import DevBoardControls from './DevBoardControls'
+
+const IS_QA = import.meta.env.VITE_QA === 'true'
 
 interface Props {
   state: GameState
@@ -63,6 +66,8 @@ export default function NameEntry({ state, dispatch }: Props) {
         </button>
         {!canStart && <p className="hint">Enter at least {MIN_PLAYERS} names to start.</p>}
       </form>
+
+      {IS_QA && canStart && <DevBoardControls dispatch={dispatch} />}
     </main>
   )
 }

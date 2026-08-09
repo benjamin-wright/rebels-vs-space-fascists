@@ -38,6 +38,7 @@ export type Action =
   | { type: 'REMOVE_PLAYER'; index: number }
   | { type: 'UPDATE_PLAYER_NAME'; index: number; name: string }
   | { type: 'START_ROLE_ALLOCATION' }
+  | { type: 'START_ROLE_ALLOCATION_WITH_OPTIONS'; planetCount: number; nodesPerPlanet: number; extraMonorailProbability: number }
   | { type: 'ACKNOWLEDGE_ROLE' }
   | { type: 'REVEAL_TURN' }
   | { type: 'MOVE'; nodeId: string }

@@ -54,6 +54,12 @@ export default function GameBoard({ state, dispatch }: Props) {
             I am {player.name}, start my turn
           </button>
         </div>
+        <button
+          className="btn-ghost exit-game"
+          onClick={() => dispatch({ type: 'RESET_GAME' })}
+        >
+          ✕ Exit game
+        </button>
       </main>
     )
   }
@@ -156,6 +162,13 @@ export default function GameBoard({ state, dispatch }: Props) {
           )
         })}
       </fieldset>
+
+      <button
+        className="btn-ghost exit-game"
+        onClick={() => dispatch({ type: 'RESET_GAME' })}
+      >
+        ✕ Exit game
+      </button>
     </main>
   )
 }
