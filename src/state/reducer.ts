@@ -35,11 +35,11 @@ function shuffle<T>(items: T[]): T[] {
   return copy
 }
 
-function startRoleAllocation(state: GameState): GameState {
+function startRoleAllocation(state: GameState, options?: { planetCount?: number; nodesPerPlanet?: number; extraMonorailProbability?: number; spread?: number }): GameState {
   const names = state.playerNames.map(n => n.trim()).filter(Boolean)
   if (names.length < MIN_PLAYERS) return state
 
-  const board = generateBoard()
+  const board = generateBoard(options)
   const shuffledNames = shuffle(names)
   const shuffledNodeIds = shuffle(board.nodes.map(n => n.id)).slice(0, shuffledNames.length)
 
@@ -105,6 +105,10 @@ function move(state: GameState, nodeId: string): GameState {
     return { ...state, players, phase: 'game-over', winner: 'fascist' }
   }
 
+  if (isRebel && players.some(p => p.role === 'fascist' && p.position === updatedPlayer.position)) {
+    return { ...state, players, phase: 'game-over', winner: 'fascist' }
+  }
+
   const nextPlayerIndex = (state.currentPlayerIndex + 1) % players.length
   const wrappedRound = nextPlayerIndex === 0
   const nextRound = wrappedRound ? state.round + 1 : state.round
@@ -142,6 +146,15 @@ export function reducer(state: GameState, action: Action): GameState {
     case 'START_ROLE_ALLOCATION':
       if (state.phase !== 'name-entry') return state
       return startRoleAllocation(state)
+
+    case 'START_ROLE_ALLOCATION_WITH_OPTIONS':
+      if (state.phase !== 'name-entry') return state
+      return startRoleAllocation(state, {
+        planetCount: action.planetCount,
+        nodesPerPlanet: action.nodesPerPlanet,
+        extraMonorailProbability: action.extraMonorailProbability,
+        spread: action.spread,
+      })
 
     case 'ACKNOWLEDGE_ROLE':
       return acknowledgeRole(state)

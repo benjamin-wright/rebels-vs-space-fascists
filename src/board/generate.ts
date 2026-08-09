@@ -19,6 +19,11 @@ export interface GenerateBoardOptions {
   nodesPerPlanet?: number
   /** Probability of keeping an extra nearest-neighbour monorail link beyond the guaranteed spanning tree. */
   extraMonorailProbability?: number
+  /**
+   * How far apart stations are spread (0–1). Higher values push stations apart via
+   * a Poisson-disc-like rejection step so they don't cluster.
+   */
+  spread?: number
   /** Seed for deterministic generation; defaults to a random seed. */
   seed?: number
 }
@@ -34,8 +39,9 @@ const PLANET_NAMES = [
 
 const DEFAULT_OPTIONS: Required<GenerateBoardOptions> = {
   planetCount: 3,
-  nodesPerPlanet: 7,
-  extraMonorailProbability: 0.5,
+  nodesPerPlanet: 12,
+  extraMonorailProbability: 0.2,
+  spread: 1.0,
   seed: Date.now(),
 }
 
@@ -75,12 +81,57 @@ function minimumSpanningTree(nodes: BoardNode[]): BoardEdge[] {
   return edges
 }
 
+/**
+ * Places `count` points in [0,1]×[0,1] using a simple rejection approach:
+ * each candidate is kept only if it is at least `minDist` away from all
+ * already-placed points. Up to `maxAttempts` candidates are tried per point;
+ * if none passes the test the best-effort fallback (furthest candidate) is used.
+ */
+function spreadPoints(
+  rand: () => number,
+  count: number,
+  minDist: number,
+): Array<{ x: number; y: number }> {
+  const placed: Array<{ x: number; y: number }> = []
+  const maxAttempts = 30
+
+  for (let i = 0; i < count; i++) {
+    let best: { x: number; y: number } | null = null
+    let bestMinDist = -1
+
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const candidate = { x: rand(), y: rand() }
+      const nearest = placed.reduce((min, p) => {
+        const d = Math.hypot(candidate.x - p.x, candidate.y - p.y)
+        return d < min ? d : min
+      }, Infinity)
+
+      if (nearest >= minDist) {
+        best = candidate
+        break
+      }
+      if (nearest > bestMinDist) {
+        bestMinDist = nearest
+        best = candidate
+      }
+    }
+
+    placed.push(best!)
+  }
+
+  return placed
+}
+
 /** Generates a 2D graph "board" made of several planets linked by shuttle routes. */
 export function generateBoard(options: GenerateBoardOptions = {}): Board {
   const opts = { ...DEFAULT_OPTIONS, ...options }
   const planetCount = Math.max(3, opts.planetCount)
   const nodesPerPlanet = Math.max(4, opts.nodesPerPlanet)
+  const spread = Math.max(0, Math.min(1, opts.spread))
   const rand = mulberry32(opts.seed)
+
+  // Minimum distance between nodes: 0 spread → 0, 1 spread → 1/sqrt(nodesPerPlanet)
+  const minDist = spread / Math.sqrt(nodesPerPlanet)
 
   const planets: Planet[] = []
   const nodes: BoardNode[] = []
@@ -93,17 +144,15 @@ export function generateBoard(options: GenerateBoardOptions = {}): Board {
     }
     planets.push(planet)
 
-    const planetNodes: BoardNode[] = []
-    for (let n = 0; n < nodesPerPlanet; n++) {
-      planetNodes.push({
-        id: `${planet.id}-node-${n}`,
-        planetId: planet.id,
-        name: `Station ${n + 1}`,
-        x: rand(),
-        y: rand(),
-        isSpaceport: false,
-      })
-    }
+    const points = spreadPoints(rand, nodesPerPlanet, minDist)
+    const planetNodes: BoardNode[] = points.map((pt, n) => ({
+      id: `${planet.id}-node-${n}`,
+      planetId: planet.id,
+      name: `Station ${n + 1}`,
+      x: pt.x,
+      y: pt.y,
+      isSpaceport: false,
+    }))
     nodesByPlanet.push(planetNodes)
     nodes.push(...planetNodes)
   }
