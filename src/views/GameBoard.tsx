@@ -133,10 +133,11 @@ export default function GameBoard({ state, dispatch }: Props) {
         planetId={player.role === 'rebel' ? viewedPlanetId : node.planetId}
         currentPlayerPosition={player.position}
         visiblePlayers={players
-          .filter(
-            p =>
-              player.role === 'rebel' ||
-              board.nodes.find(n => n.id === p.position)?.planetId === node.planetId,
+          .filter(p =>
+            player.role === 'rebel'
+              ? true
+              : p.role === 'fascist' &&
+                board.nodes.find(n => n.id === p.position)?.planetId === node.planetId,
           )
           .map(p => ({ player: p, isCurrent: p === player }))}
       />

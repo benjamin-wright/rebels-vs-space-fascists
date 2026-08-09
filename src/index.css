@@ -291,6 +291,19 @@ button {
   margin-top: 0.25rem;
 }
 
+.dev-panel__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.dev-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 /* ── Planet map ─────────────────────────────────────────── */
 
 .planet-tabs {

@@ -35,7 +35,7 @@ function shuffle<T>(items: T[]): T[] {
   return copy
 }
 
-function startRoleAllocation(state: GameState, options?: { planetCount?: number; nodesPerPlanet?: number; extraMonorailProbability?: number }): GameState {
+function startRoleAllocation(state: GameState, options?: { planetCount?: number; nodesPerPlanet?: number; extraMonorailProbability?: number; spread?: number }): GameState {
   const names = state.playerNames.map(n => n.trim()).filter(Boolean)
   if (names.length < MIN_PLAYERS) return state
 
@@ -149,6 +149,7 @@ export function reducer(state: GameState, action: Action): GameState {
         planetCount: action.planetCount,
         nodesPerPlanet: action.nodesPerPlanet,
         extraMonorailProbability: action.extraMonorailProbability,
+        spread: action.spread,
       })
 
     case 'ACKNOWLEDGE_ROLE':
