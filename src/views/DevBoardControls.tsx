@@ -11,9 +11,9 @@ interface Props {
 
 export default function DevBoardControls({ dispatch }: Props) {
   const [planetCount, setPlanetCount] = useState(3)
-  const [nodesPerPlanet, setNodesPerPlanet] = useState(7)
-  const [extraMonorailProbability, setExtraMonorailProbability] = useState(0.5)
-  const [spread, setSpread] = useState(0.5)
+  const [nodesPerPlanet, setNodesPerPlanet] = useState(12)
+  const [extraMonorailProbability, setExtraMonorailProbability] = useState(0.2)
+  const [spread, setSpread] = useState(1.0)
   const [previewBoard, setPreviewBoard] = useState<Board | null>(null)
   const [previewPlanetIndex, setPreviewPlanetIndex] = useState(0)
 

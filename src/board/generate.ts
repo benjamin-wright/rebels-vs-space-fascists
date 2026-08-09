@@ -39,9 +39,9 @@ const PLANET_NAMES = [
 
 const DEFAULT_OPTIONS: Required<GenerateBoardOptions> = {
   planetCount: 3,
-  nodesPerPlanet: 7,
-  extraMonorailProbability: 0.5,
-  spread: 0.5,
+  nodesPerPlanet: 12,
+  extraMonorailProbability: 0.2,
+  spread: 1.0,
   seed: Date.now(),
 }
 

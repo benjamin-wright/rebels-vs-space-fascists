@@ -105,6 +105,10 @@ function move(state: GameState, nodeId: string): GameState {
     return { ...state, players, phase: 'game-over', winner: 'fascist' }
   }
 
+  if (isRebel && players.some(p => p.role === 'fascist' && p.position === updatedPlayer.position)) {
+    return { ...state, players, phase: 'game-over', winner: 'fascist' }
+  }
+
   const nextPlayerIndex = (state.currentPlayerIndex + 1) % players.length
   const wrappedRound = nextPlayerIndex === 0
   const nextRound = wrappedRound ? state.round + 1 : state.round
